@@ -1,3 +1,5 @@
+# Please be aware that this is uncompleted version of the SDK. it's still in progress and most of it are copy pasted from the Binance connector SDK for Spot API, that's why you will still see some of the Spot API
+
 # Binance connector in Nodejs
 
 [![npm version](https://badge.fury.io/js/%40binance%2Fconnector.svg)](https://badge.fury.io/js/%40binance%2Fconnector)
