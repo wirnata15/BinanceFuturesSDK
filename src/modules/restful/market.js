@@ -352,120 +352,349 @@ const Market = (superclass) =>
       );
     }
 
-    // ======================================= WIP agung
-
     /**
-     * Current Average Price<br>
+     * Get Funding Rate Info <br>
      *
-     * GET /api/v3/avgPrice<br>
+     * GET /fapi/v1/fundingInfo<br>
      *
-     * Current average price for a symbol.<br>
-     * {@link https://binance-docs.github.io/apidocs/spot/en/#current-average-price}
+     * {@link https://binance-docs.github.io/apidocs/futures/en/#get-funding-rate-info}
      *
-     * @param {string} symbol
      */
-    avgPrice(symbol) {
-      validateRequiredParameters({ symbol });
-
-      return this.publicRequest("GET", "/api/v3/avgPrice", {
-        symbol: symbol.toUpperCase(),
-      });
+    fundingInfo() {
+      return this.publicRequest("GET", "/fapi/v1/fundingInfo", {});
     }
 
     /**
      * 24hr Ticker Price Change Statistics<br>
      *
-     * GET /api/v3/ticker/24hr<br>
+     * GET /fapi/v1/ticker/24hr<br>
      *
-     * {@link https://binance-docs.github.io/apidocs/spot/en/#24hr-ticker-price-change-statistics}
+     * {@link https://binance-docs.github.io/apidocs/futures/en/#24hr-ticker-price-change-statistics}
      *
-     * @param {string} [symbol]
-     * @param {Array} [symbols] - an array of symbols
-     * @param {string} [type] - "MINI" or "FULL"
+     * @param {string} symbol
      */
-    ticker24hr(symbol = "", symbols = [], type = "FULL") {
-      symbols = symbols.map((symbol) => symbol.toUpperCase());
-
-      return this.publicRequest("GET", "/api/v3/ticker/24hr", {
+    priceChange24H(symbol) {
+      return this.publicRequest("GET", "/fapi/v1/ticker/24hr", {
         symbol: symbol.toUpperCase(),
-        symbols,
-        type,
       });
     }
 
     /**
-     * Symbol Price Ticker<br>
+     * Symbol Price Ticker <br>
      *
-     * GET /api/v3/ticker/price<br>
+     * GET /fapi/v1/ticker/price<br>
      *
-     * {@link https://binance-docs.github.io/apidocs/spot/en/#symbol-price-ticker}
+     * {@link https://binance-docs.github.io/apidocs/futures/en/#symbol-price-ticker}
      *
-     * @param {string} [symbol]
-     * @param {Array} [symbols] - an array of symbols
+     * @param {string} symbol
      */
-    tickerPrice(symbol = "", symbols = []) {
-      symbols = symbols.map((symbol) => symbol.toUpperCase());
-
-      return this.publicRequest("GET", "/api/v3/ticker/price", {
+    symbolPriceTicker(symbol) {
+      return this.publicRequest("GET", "/fapi/v1/ticker/price", {
         symbol: symbol.toUpperCase(),
-        symbols,
       });
     }
 
     /**
-     * Symbol Order Book Ticker<br>
+     * Symbol Price Ticker V2 <br>
      *
-     * GET /api/v3/ticker/bookTicker<br>
+     * GET /fapi/v2/ticker/price<br>
      *
-     * Best price/qty on the order book for a symbol or symbols.<br>
-     * {@link https://binance-docs.github.io/apidocs/spot/en/#symbol-order-book-ticker}
+     * {@link https://binance-docs.github.io/apidocs/futures/en/#symbol-price-ticker-v2}
      *
-     * @param {string} [symbol]
-     * @param {Array} [symbols] - an array of symbols
+     * @param {string} symbol
      */
-    bookTicker(symbol = "", symbols = []) {
-      symbols = symbols.map((symbol) => symbol.toUpperCase());
-
-      return this.publicRequest("GET", "/api/v3/ticker/bookTicker", {
+    symbolPriceTickerV2(symbol) {
+      return this.publicRequest("GET", "/fapi/v2/ticker/price", {
         symbol: symbol.toUpperCase(),
-        symbols,
       });
     }
 
     /**
-     * Rolling window price change statistics<br>
+     * Symbol Order Book Ticker <br>
      *
-     * GET /api/v3/ticker<br>
+     * GET /fapi/v1/ticker/bookTicker<br>
      *
-     * The window used to compute statistics is typically slightly wider than requested windowSize.<br>
+     * {@link https://binance-docs.github.io/apidocs/futures/en/#symbol-order-book-ticker}
      *
-     * openTime for /api/v3/ticker always starts on a minute, while the closeTime is the current time of the request. As such, the effective window might be up to 1 minute wider than requested.<br>
-     *
-     * E.g. If the closeTime is 1641287867099 (January 04, 2022 09:17:47:099 UTC) , and the windowSize is 1d. the openTime will be: 1641201420000 (January 3, 2022, 09:17:00 UTC)<br>
-     *
-     * Weight(IP): 2 for each requested symbol regardless of windowSize.<br>
-     *
-     * The weight for this request will cap at 100 once the number of symbols in the request is more than 50.<br>
-     *
-     * {@link https://binance-docs.github.io/apidocs/spot/en/#rolling-window-price-change-statistics}
-     *
-     * @param {string} [symbol]
-     * @param {Array} [symbols] - an array of symbols
-     * @param {object} [options]
-     * @param {string} [options.type] Supported values: FULL or MINI.
-     * @param {number} [options.windowSize] - Defaults to 1d if no parameter provided.
+     * @param {string} symbol
      */
-    rollingWindowTicker(symbol = "", symbols = [], options = {}) {
-      symbols = symbols.map((symbol) => symbol.toUpperCase());
+    bookTicker(symbol) {
+      return this.publicRequest("GET", "/fapi/v1/ticker/bookTicker", {
+        symbol: symbol.toUpperCase(),
+      });
+    }
 
+    /**
+     * Open Interest <br>
+     *
+     * GET /fapi/v1/openInterest<br>
+     *
+     * {@link https://binance-docs.github.io/apidocs/futures/en/#open-interest}
+     *
+     * @param {string} symbol
+     */
+    openInterest(symbol) {
+      validateRequiredParameters({ symbol });
+      return this.publicRequest("GET", "/fapi/v1/openInterest", {
+        symbol: symbol.toUpperCase(),
+      });
+    }
+
+    /**
+     * Quarterly Contract Settlement Price <br>
+     *
+     * GET /futures/data/delivery-price<br>
+     *
+     * {@link https://binance-docs.github.io/apidocs/futures/en/#quarterly-contract-settlement-price}
+     *
+     * @param {string} pair
+     */
+    deliveryPrice(pair) {
+      validateRequiredParameters({ pair });
+      return this.publicRequest("GET", "/futures/data/delivery-price", {
+        pair: pair.toUpperCase(),
+      });
+    }
+
+    /**
+     * Open Interest Statistics <br>
+     *
+     * GET /futures/data/openInterestHist<br>
+     *
+     * {@link https://binance-docs.github.io/apidocs/futures/en/#open-interest-statistics}
+     *
+     * @param {string} symbol
+     * @param {string} period
+     * @param {object} options
+     * @param {number} options.limit
+     * @param {number} options.startTime
+     * @param {number} options.endTime
+     *
+     */
+    openInterestHist(symbol, period, options = {}) {
+      validateRequiredParameters({ symbol, period });
       return this.publicRequest(
         "GET",
-        "/api/v3/ticker",
+        "/futures/data/openInterestHist",
         Object.assign(options, {
           symbol: symbol.toUpperCase(),
-          symbols,
+          period,
         })
       );
+    }
+
+    /**
+     * Top Trader Long/Short Ratio (Accounts) <br>
+     *
+     * GET /futures/data/topLongShortAccountRatio<br>
+     *
+     * {@link https://binance-docs.github.io/apidocs/futures/en/#top-trader-long-short-ratio-accounts}
+     *
+     * @param {string} symbol
+     * @param {string} period
+     * @param {object} options
+     * @param {number} options.limit
+     * @param {number} options.startTime
+     * @param {number} options.endTime
+     *
+     */
+    topLongShortAccountRatio(symbol, period, options = {}) {
+      validateRequiredParameters({ symbol, period });
+      return this.publicRequest(
+        "GET",
+        "/futures/data/topLongShortAccountRatio",
+        Object.assign(options, {
+          symbol: symbol.toUpperCase(),
+          period,
+        })
+      );
+    }
+
+    /**
+     * Top Trader Long/Short Ratio (Positions) <br>
+     *
+     * GET /futures/data/topLongShortPositionRatio<br>
+     *
+     * {@link https://binance-docs.github.io/apidocs/futures/en/#top-trader-long-short-ratio-positions}
+     *
+     * @param {string} symbol
+     * @param {string} period
+     * @param {object} options
+     * @param {number} options.limit
+     * @param {number} options.startTime
+     * @param {number} options.endTime
+     *
+     */
+    topLongShortPositionRatio(symbol, period, options = {}) {
+      validateRequiredParameters({ symbol, period });
+      return this.publicRequest(
+        "GET",
+        "/futures/data/topLongShortPositionRatio",
+        Object.assign(options, {
+          symbol: symbol.toUpperCase(),
+          period,
+        })
+      );
+    }
+
+    /**
+     * Long/Short Ratio <br>
+     *
+     * GET /futures/data/globalLongShortAccountRatio<br>
+     *
+     * {@link https://binance-docs.github.io/apidocs/futures/en/#long-short-ratio}
+     *
+     * @param {string} symbol
+     * @param {string} period
+     * @param {object} options
+     * @param {number} options.limit
+     * @param {number} options.startTime
+     * @param {number} options.endTime
+     *
+     */
+    globalLongShortAccountRatio(symbol, period, options = {}) {
+      validateRequiredParameters({ symbol, period });
+      return this.publicRequest(
+        "GET",
+        "/futures/data/globalLongShortAccountRatio",
+        Object.assign(options, {
+          symbol: symbol.toUpperCase(),
+          period,
+        })
+      );
+    }
+
+    /**
+     * Taker Buy/Sell Volume <br>
+     *
+     * GET /futures/data/takerlongshortRatio<br>
+     *
+     * {@link https://binance-docs.github.io/apidocs/futures/en/#long-short-ratio}
+     *
+     * @param {string} symbol
+     * @param {string} period
+     * @param {object} options
+     * @param {number} options.limit
+     * @param {number} options.startTime
+     * @param {number} options.endTime
+     *
+     */
+    takerlongshortRatio(symbol, period, options = {}) {
+      validateRequiredParameters({ symbol, period });
+      return this.publicRequest(
+        "GET",
+        "/futures/data/takerlongshortRatio",
+        Object.assign(options, {
+          symbol: symbol.toUpperCase(),
+          period,
+        })
+      );
+    }
+
+    /**
+     * Basis <br>
+     *
+     * GET /futures/data/basis<br>
+     *
+     * {@link https://binance-docs.github.io/apidocs/futures/en/#basis}
+     *
+     * @param {string} pair
+     * @param {string} contractType [CURRENT_QUARTER, NEXT_QUARTER, PERPETUAL]
+     * @param {string} period
+     * @param {number} limit
+     * @param {object} options
+     * @param {number} options.startTime
+     * @param {number} options.endTime
+     *
+     */
+    basis(pair, contractType, period, limit, options = {}) {
+      validateRequiredParameters({ pair, contractType, period, limit });
+      return this.publicRequest(
+        "GET",
+        "/futures/data/basis",
+        Object.assign(options, {
+          pair: pair.toUpperCase(),
+          contractType,
+          period,
+          limit,
+        })
+      );
+    }
+
+    /**
+     * Historical BLVT NAV Kline/Candlestick <br>
+     *
+     * GET /fapi/v1/lvtKlines<br>
+     *
+     * {@link https://binance-docs.github.io/apidocs/futures/en/#historical-blvt-nav-kline-candlestick}
+     *
+     * @param {string} symbol
+     * @param {string} interval
+     * @param {object} options
+     * @param {number} options.startTime
+     * @param {number} options.endTime
+     * @param {number} options.limit
+     *
+     */
+    lvtKlines(symbol, interval, options = {}) {
+      validateRequiredParameters({ symbol, interval });
+      return this.publicRequest(
+        "GET",
+        "/fapi/v1/lvtKlines",
+        Object.assign(options, {
+          symbol: symbol.toUpperCase(),
+          interval,
+        })
+      );
+    }
+
+    /**
+     * Composite Index Symbol Information <br>
+     *
+     * GET /fapi/v1/indexInfo <br>
+     *
+     * {@link https://binance-docs.github.io/apidocs/futures/en/#composite-index-symbol-information}
+     *
+     * @param {string} symbol
+     *
+     */
+    indexInfo(symbol) {
+      return this.publicRequest("GET", "/fapi/v1/indexInfo", {
+        symbol: symbol.toUpperCase(),
+      });
+    }
+
+    /**
+     * Multi-Assets Mode Asset Index <br>
+     *
+     * GET /fapi/v1/assetIndex <br>
+     *
+     * {@link https://binance-docs.github.io/apidocs/futures/en/#multi-assets-mode-asset-index}
+     *
+     * @param {string} symbol
+     *
+     */
+    assetIndex(symbol) {
+      return this.publicRequest("GET", "/fapi/v1/assetIndex", {
+        symbol: symbol.toUpperCase(),
+      });
+    }
+
+    /**
+     * Query Index Price Constituents <br>
+     *
+     * GET /fapi/v1/constituents <br>
+     *
+     * {@link https://binance-docs.github.io/apidocs/futures/en/#query-index-price-constituents}
+     *
+     * @param {string} symbol
+     *
+     */
+    constituents(symbol) {
+      validateRequiredParameters({ symbol });
+      return this.publicRequest("GET", "/fapi/v1/constituents", {
+        symbol: symbol.toUpperCase(),
+      });
     }
   };
 
