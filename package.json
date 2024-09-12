@@ -1,7 +1,7 @@
 {
-  "name": "@binance/connector",
-  "version": "3.4.0",
-  "description": "This is a lightweight library that works as a connector to the Binance public API.",
+  "name": "@binance/futures-sdk",
+  "version": "0.1.0",
+  "description": "This is a lightweight library that works as a connector to the Binance Futures public API created by me personally by copying from @binance/connector a.k.a Binance Spot API.",
   "main": "src/index.js",
   "scripts": {
     "jsdoc": "jsdoc -c ./docs_src/conf.json && ./docs_src/docs.sh",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/binance/binance-connector-node.git"
+    "url": "https://github.com/wirnata15/BinanceFuturesSDK"
   },
   "engines": {
     "node": ">=12.22.3",
@@ -23,14 +23,12 @@
   },
   "keywords": [
     "Binance",
-    "API"
+    "API",
+    "Futures",
+    "SDK"
   ],
-  "author": "Binance",
+  "author": "Binance/wirnata15",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/binance/binance-connector-node/issues"
-  },
-  "homepage": "https://github.com/binance/binance-connector-node#readme",
   "devDependencies": {
     "clean-jsdoc-theme": "^4.2",
     "husky": "^6.0.0",
