@@ -14,7 +14,7 @@ const Trade = (superclass) =>
      *
      * POST /fapi/v1/order <br>
      *
-     * {@link https://binance-docs.github.io/apidocs/spot/en/#new-order-trade}
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api}
      *
      * @param {string} symbol
      * @param {string} side
@@ -59,6 +59,105 @@ const Trade = (superclass) =>
           symbol: symbol.toUpperCase(),
           side: side.toUpperCase(),
           type: type.toUpperCase(),
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Place Multiple Orders(TRADE) <br>
+     *
+     * POST /fapi/v1/batchOrders <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Place-Multiple-Orders}
+     *
+     * @param {object[]} batchOrders => reffer to New Order params (:13)
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {number} [options.recvWindow]
+     */
+
+    placeMultipleOrder(batchOrders, timestamp, options = {}) {
+      for (let i = 0; i < batchOrders.length; i++) {
+        const { symbol, side, type, quantity } = batchOrders[i];
+        validateRequiredParameters({ symbol, side, type, quantity });
+      }
+      validateRequiredParameters({ timestamp });
+      return this.signRequest(
+        "POST",
+        "/fapi/v1/batchOrders",
+        Object.assign(options, {
+          batchOrders,
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Modify Order (TRADE) <br>
+     *
+     * PUT /fapi/v1/order <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Modify-Order}
+     *
+     * @param {string} symbol
+     * @param {string} side
+     * @param {number} quantity
+     * @param {number} price
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {number} [options.orderId]
+     * @param {string} [options.origClientOrderId]
+     * @param {number} [options.priceMatch] only avaliable for LIMIT/STOP/TAKE_PROFIT order; can be set to OPPONENT/ OPPONENT_5/ OPPONENT_10/ OPPONENT_20: /QUEUE/ QUEUE_5/ QUEUE_10/ QUEUE_20; Can't be passed together with price
+     * @param {number} [options.recvWindow]
+     *
+     */
+
+    modifyOrder(symbol, side, number, price, timestamp, options = {}) {
+      validateRequiredParameters({ symbol, side, number, price, timestamp });
+      return this.signRequest(
+        "PUT",
+        "/fapi/v1/order",
+        Object.assign(options, {
+          symbol,
+          side,
+          number,
+          price,
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Modify Multiple Orders(TRADE) <br>
+     *
+     * PUT /fapi/v1/batchOrders <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Modify-Multiple-Orders}
+     *
+     * @param {object[]} batchOrders => reffer to Modify Order params (:97)
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {number} [options.recvWindow]
+     */
+
+    modifyMultipleOrder(batchOrders, timestamp, options = {}) {
+      for (let i = 0; i < batchOrders.length; i++) {
+        const { symbol, side, quantity, price, timestamp } = batchOrders[i];
+        validateRequiredParameters({
+          symbol,
+          side,
+          quantity,
+          price,
+          timestamp,
+        });
+      }
+      validateRequiredParameters({ timestamp });
+      return this.signRequest(
+        "PUT",
+        "/fapi/v1/batchOrders",
+        Object.assign(options, {
+          batchOrders,
           timestamp,
         })
       );
