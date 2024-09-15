@@ -163,33 +163,143 @@ const Trade = (superclass) =>
       );
     }
 
-    // WIP - Agung add neworder trade endpoint
+    /**
+     * Get Order Modify History (USER_DATA) <br>
+     *
+     * GET /fapi/v1/orderAmendment <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Get-Order-Modify-History}
+     *
+     * @param {string} symbol
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {number} [options.orderId]
+     * @param {string} [options.origClientOrderId]
+     * @param {number} [options.startTime]
+     * @param {number} [options.endTime]
+     * @param {number} [options.limit]
+     * @param {number} [options.recvWindow]
+     */
+
+    orderModifyHistory(symbol, timestamp, options = {}) {
+      validateRequiredParameters({ symbol, timestamp });
+      return this.signRequest(
+        "GET",
+        "/fapi/v1/orderAmendment",
+        Object.assign(options, {
+          symbol: symbol.toUpperCase(),
+          timestamp,
+        })
+      );
+    }
 
     /**
      * Cancel Order (TRADE)<br>
      *
-     * DELETE /api/v3/order<br>
+     * DELETE /fapi/v1/order<br>
      *
      * {@link https://binance-docs.github.io/apidocs/spot/en/#cancel-order-trade}
      *
      * @param {string} symbol
+     * @param {number} timestamp
      * @param {object} [options]
      * @param {number} [options.orderId]
      * @param {string} [options.origClientOrderId]
-     * @param {string} [options.newClientOrderId]
      * @param {number} [options.recvWindow] - The value cannot be greater than 60000
      */
-    cancelOrder(symbol, options = {}) {
-      validateRequiredParameters({ symbol });
+    cancelOrder(symbol, timestamp, options = {}) {
+      validateRequiredParameters({ symbol, timestamp });
 
       return this.signRequest(
         "DELETE",
-        "/api/v3/order",
+        "/fapi/v1/order",
         Object.assign(options, {
           symbol: symbol.toUpperCase(),
+          timestamp,
         })
       );
     }
+
+    /**
+     * Cancel Multiple Orders (TRADE) <br>
+     *
+     * DELETE /fapi/v1/batchOrders <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Cancel-Multiple-Orders}
+     *
+     * @param {string} symbol
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {number[]} [options.orderIdList]
+     * @param {string[]} [options.origClientOrderIdList]
+     * @param {number} [options.recvWindow]
+     */
+
+    cancelMultipleOrders(symbol, timestamp, options = {}) {
+      validateRequiredParameters({ symbol, timestamp });
+      return this.signRequest(
+        "DELETE",
+        "/fapi/v1/batchOrders",
+        Object.assign(options, {
+          symbol,
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Cancel All Open Orders (TRADE) <br>
+     *
+     * DELETE /fapi/v1/allOpenOrders <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Cancel-All-Open-Orders}
+     *
+     * @param {string} symbol
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {number} [options.recvWindow]
+     */
+
+    cancelAllOpenOrders(symbol, timestamp, options = {}) {
+      validateRequiredParameters({ symbol, timestamp });
+      return this.signRequest(
+        "DELETE",
+        "/fapi/v1/allOpenOrders",
+        Object.assign(options, {
+          symbol,
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Auto-Cancel All Open Orders (TRADE) <br>
+     *
+     * POST /fapi/v1/countdownCancelAll <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Auto-Cancel-All-Open-Orders}
+     *
+     * @param {string} symbol
+     * @param {number} timestamp
+     * @param {number} countdownTime
+     * @param {object} [options]
+     * @param {number} [options.recvWindow]
+     */
+
+    countDownCancelAll(symbol, timestamp, countdownTime, options = {}) {
+      validateRequiredParameters({ symbol, timestamp, countdownTime });
+      return this.signRequest(
+        "POST",
+        "/fapi/v1/countdownCancelAll",
+        Object.assign(options, {
+          symbol,
+          countdownTime,
+          timestamp,
+        })
+      );
+    }
+
+    // WIP - Agung add neworder trade endpoint
 
     /**
      * Cancel all Open Orders on a Symbol (TRADE)<br>
