@@ -119,8 +119,8 @@ const Trade = (superclass) =>
         "PUT",
         "/fapi/v1/order",
         Object.assign(options, {
-          symbol,
-          side,
+          symbol: symbol.toUpperCase(),
+          side: side.toUpperCase(),
           number,
           price,
           timestamp,
@@ -241,7 +241,7 @@ const Trade = (superclass) =>
         "DELETE",
         "/fapi/v1/batchOrders",
         Object.assign(options, {
-          symbol,
+          symbol: symbol.toUpperCase(),
           timestamp,
         })
       );
@@ -266,7 +266,7 @@ const Trade = (superclass) =>
         "DELETE",
         "/fapi/v1/allOpenOrders",
         Object.assign(options, {
-          symbol,
+          symbol: symbol.toUpperCase(),
           timestamp,
         })
       );
@@ -292,8 +292,225 @@ const Trade = (superclass) =>
         "POST",
         "/fapi/v1/countdownCancelAll",
         Object.assign(options, {
-          symbol,
+          symbol: symbol.toUpperCase(),
           countdownTime,
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Query Order (USER_DATA) <br>
+     *
+     * GET /fapi/v1/order <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Query-Order}
+     *
+     * @param {string} symbol
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {number} [options.orderId]
+     * @param {string} [options.origClientOrderId]
+     * @param {number} [options.recvWindow]
+     */
+
+    queryOrder(symbol, timestamp, options = {}) {
+      validateRequiredParameters({ symbol, timestamp });
+      return this.signRequest(
+        "GET",
+        "/fapi/v1/order",
+        Object.assign(options, {
+          symbol: symbol.toUpperCase(),
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Query All Order (USER_DATA) <br>
+     *
+     * GET /fapi/v1/allOrders <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/All-Orders}
+     *
+     * @param {string} symbol
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {number} [options.orderId]
+     * @param {number} [options.startTime]
+     * @param {number} [options.endTime]
+     * @param {string} [options.origClientOrderId]
+     * @param {number} [options.recvWindow]
+     */
+
+    queryAllOrders(symbol, timestamp, options = {}) {
+      validateRequiredParameters({ symbol, timestamp });
+      return this.signRequest(
+        "GET",
+        "/fapi/v1/allOrders",
+        Object.assign(options, {
+          symbol: symbol.toUpperCase(),
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Current All Open Orders (USER_DATA) <br>
+     *
+     * GET /fapi/v1/openOrders <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Current-All-Open-Orders}
+     *
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {string} [options.symbol]
+     * @param {number} [options.recvWindow]
+     */
+
+    queryCurrentAllOpenOrders(timestamp, options = {}) {
+      validateRequiredParameters({ timestamp });
+      return this.signRequest(
+        "GET",
+        "/fapi/v1/openOrders",
+        Object.assign(options, {
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Query Current Open Order (USER_DATA) <br>
+     *
+     * GET /fapi/v1/openOrder <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Query-Current-Open-Order}
+     *
+     * @param {string} symbol
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {number} [options.orderId]
+     * @param {string} [options.origClientOrderId]
+     * @param {number} [options.recvWindow]
+     */
+
+    queryCurrentOpenOrder(symbol, timestamp, options = {}) {
+      validateRequiredParameters({ symbol, timestamp });
+      return this.signRequest(
+        "GET",
+        "/fapi/v1/openOrder",
+        Object.assign(options, {
+          symbol: symbol.toUpperCase(),
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * User's Force Orders (USER_DATA) <br>
+     *
+     * GET /fapi/v1/forceOrders <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Users-Force-Orders}
+     *
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {string} [options.symbol]
+     * @param {string} [options.autoCloseType]
+     * @param {string} [options.startTime]
+     * @param {string} [options.endTime]
+     * @param {string} [options.limit]
+     * @param {number} [options.recvWindow]
+     */
+
+    forceOrders(timestamp, options = {}) {
+      validateRequiredParameters({ symbol, timestamp });
+      return this.signRequest(
+        "GET",
+        "/fapi/v1/forceOrders",
+        Object.assign(options, {
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Account Trade List (USER_DATA) <br>
+     *
+     * GET /fapi/v1/userTrades <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Account-Trade-List}
+     *
+     * @param {string} symbol
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {number} [options.orderId]
+     * @param {number} [options.startTime]
+     * @param {number} [options.endTime]
+     * @param {number} [options.fromId]
+     * @param {number} [options.limit]
+     * @param {number} [options.recvWindow]
+     */
+
+    queryUserTrades(symbol, timestamp, options = {}) {
+      validateRequiredParameters({ symbol, timestamp });
+      return this.signRequest(
+        "GET",
+        "/fapi/v1/userTrades",
+        Object.assign(options, {
+          symbol: symbol.toUpperCase(),
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Change Margin Type(TRADE) <br>
+     *
+     * POST /fapi/v1/marginType <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Change-Margin-Type}
+     *
+     * @param {string} symbol
+     * @param {number} marginType
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {number} [options.recvWindow]
+     */
+
+    changeMarginType(symbol, marginType, timestamp, options = {}) {
+      validateRequiredParameters({ symbol, marginType, timestamp });
+      return this.signRequest(
+        "POST",
+        "/fapi/v1/marginType",
+        Object.assign(options, {
+          symbol: symbol.toUpperCase(),
+          marginType: marginType.toUpperCase(),
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Change Position Mode(TRADE) <br>
+     *
+     * POST /fapi/v1/positionSide/dual <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Change-Position-Mode}
+     *
+     * @param {string} dualSidePosition
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {number} [options.recvWindow]
+     */
+
+    changePositionMode(dualSidePosition, timestamp, options = {}) {
+      validateRequiredParameters({ dualSidePosition, timestamp });
+      return this.signRequest(
+        "POST",
+        "/fapi/v1/positionSide/dual",
+        Object.assign(options, {
+          dualSidePosition,
           timestamp,
         })
       );
