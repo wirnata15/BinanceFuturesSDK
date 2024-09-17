@@ -516,6 +516,88 @@ const Trade = (superclass) =>
       );
     }
 
+    /**
+     * Change Initial Leverage(TRADE) <br>
+     *
+     * POST /fapi/v1/leverage <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Change-Initial-Leverage}
+     *
+     * @param {string} symbol
+     * @param {number} leverage
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {number} [options.recvWindow]
+     */
+
+    changeLeverage(symbol, leverage, timestamp, options = {}) {
+      validateRequiredParameters({ symbol, leverage, timestamp });
+      return this.signRequest(
+        "POST",
+        "/fapi/v1/leverage",
+        Object.assign(options, {
+          symbol: symbol.toUpperCase(),
+          leverage,
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Change Multi-Assets Mode (TRADE) <br>
+     *
+     * POST /fapi/v1/multiAssetsMargin <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Change-Multi-Assets-Mode}
+     *
+     * @param {string} multiAssetsMargin
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {number} [options.recvWindow]
+     */
+
+    changeMultiAssetType(multiAssetsMargin, timestamp, options = {}) {
+      validateRequiredParameters({ multiAssetsMargin, timestamp });
+      return this.signRequest(
+        "POST",
+        "/fapi/v1/multiAssetsMargin",
+        Object.assign(options, {
+          multiAssetsMargin,
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Modify Isolated Position Margin(TRADE) <br>
+     *
+     * POST /fapi/v1/positionMargin <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Modify-Isolated-Position-Margin}
+     *
+     * @param {string} symbol
+     * @param {number} amount
+     * @param {string} type // 1: Add position margin，2: Reduce position margin
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {string} [options.positionSide] // Default BOTH for One-way Mode ; LONG or SHORT for Hedge Mode. It must be sent with Hedge Mode.
+     * @param {number} [options.recvWindow]
+     */
+
+    modifyIsolatedMargin(symbol, amount, type, timestamp, options = {}) {
+      validateRequiredParameters({ symbol, amount, type, timestamp });
+      return this.signRequest(
+        "POST",
+        "/fapi/v1/positionMargin",
+        Object.assign(options, {
+          symbol: symbol.toUpperCase(),
+          amount,
+          type,
+          timestamp,
+        })
+      );
+    }
+
     // WIP - Agung add neworder trade endpoint
   };
 

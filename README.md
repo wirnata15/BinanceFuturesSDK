@@ -1,4 +1,6 @@
-# Please be aware that this is uncompleted version of the SDK. it's still in progress and most of it are copy pasted from the Binance connector SDK for Spot API, that's why you will still see some of the Spot API
+# Please be aware that this is uncompleted version of the SDK. it's still in progress and most of it are copy pasted from the Binance connector SDK for Spot API, that's why you will still see some of the Spot API.
+
+# This SDK won't include Websocket.
 
 # Binance connector in Nodejs
 
@@ -7,26 +9,24 @@
 [![Standard-Js](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-
 This is a lightweight library that works as a connector to [Binance public API](https://github.com/binance/binance-spot-api-docs). It’s designed to be simple, clean, and easy to use with minimal dependencies.
 
 - Supported APIs:
-    - `/api/*`
-    - `/sapi/*`
-    - Spot Websocket Market Stream
-    - Spot User Data Stream
-    - Spot Websocket API
+  - `/api/*`
+  - `/sapi/*`
+  - Spot Websocket Market Stream
+  - Spot User Data Stream
+  - Spot Websocket API
 - Inclusion of test cases and examples
 - Customizable base URL
 - Support request timeout and HTTP proxy (since v2)
 - Response metadata can be displayed
 - Customizable Logger
 
-
 ## Installation
 
 ```bash
-npm install @binance/connector
+npm i wirnata15-binance_futures_sdk
 ```
 
 ## Documentation
@@ -36,22 +36,24 @@ npm install @binance/connector
 ## RESTful APIs
 
 ```javascript
-const { Spot } = require('@binance/connector')
+const { Futures } = require("wirnata15-binance_futures_sdk");
 
-const apiKey = ''
-const apiSecret = ''
-const client = new Spot(apiKey, apiSecret)
+const apiKey = "";
+const apiSecret = "";
+const client = new Futures(apiKey, apiSecret);
 
 // Get account information
-client.account().then(response => client.logger.log(response.data))
+client.account().then((response) => client.logger.log(response.data));
 
 // Place a new order
-client.newOrder('BNBUSDT', 'BUY', 'LIMIT', {
-  price: '350',
-  quantity: 1,
-  timeInForce: 'GTC'
-}).then(response => client.logger.log(response.data))
-  .catch(error => client.logger.error(error))
+client
+  .newOrder("BNBUSDT", "BUY", "LIMIT", {
+    price: "350",
+    quantity: 1,
+    timeInForce: "GTC",
+  })
+  .then((response) => client.logger.log(response.data))
+  .catch((error) => client.logger.error(error));
 ```
 
 Please find `examples` folder to check for more endpoints.
@@ -59,25 +61,25 @@ Please find `examples` folder to check for more endpoints.
 ## Key Pair Based Authentication
 
 ```javascript
-const { Spot, PrivateKeyAlgo } = require('@binance/connector')
+const { Spot, PrivateKeyAlgo } = require("@binance/connector");
 
-const apiKey = ''
-const apiSecret = '' // has no effect when RSA private key is provided
+const apiKey = "";
+const apiSecret = ""; // has no effect when RSA private key is provided
 
 // load private key
-const privateKey = fs.readFileSync('/Users/john/ssl/private_key_encrypted.pem')
-const privateKeyPassphrase = 'password'
-const privateKeyAlgo = PrivateKeyAlgo.RSA // for RSA key
-const privateKeyAlgo = PrivateKeyAlgo.ED25519 // for Ed25519 key
+const privateKey = fs.readFileSync("/Users/john/ssl/private_key_encrypted.pem");
+const privateKeyPassphrase = "password";
+const privateKeyAlgo = PrivateKeyAlgo.RSA; // for RSA key
+const privateKeyAlgo = PrivateKeyAlgo.ED25519; // for Ed25519 key
 
 const client = new Spot(apiKey, apiSecret, {
   privateKey,
   privateKeyPassphrase, // only used for encrypted key
-  privateKeyAlgo
-})
+  privateKeyAlgo,
+});
 
 // Get account information
-client.account().then(response => client.logger.log(response.data))
+client.account().then((response) => client.logger.log(response.data));
 ```
 
 ### Testnet
@@ -87,7 +89,9 @@ While `/sapi/*` endpoints don't have testnet environment yet, `/api/*` endpoints
 
 ```javascript
 // provide the testnet base url
-const client = new Spot(apiKey, apiSecret, { baseURL: 'https://testnet.binance.vision'})
+const client = new Spot(apiKey, apiSecret, {
+  baseURL: "https://testnet.binance.vision",
+});
 ```
 
 ### Base URL
@@ -105,14 +109,15 @@ It's recommended to pass in the `base_url` parameter, even in production as Bina
 Optional parameters are encapsulated to a single object as the last function parameter.
 
 ```javascript
-const { Spot } = require('@binance/connector')
+const { Futures } = require("wirnata15-binance_futures_sdk");
 
-const apiKey = ''
-const apiSecret = ''
-const client = new Spot(apiKey, apiSecret)
+const apiKey = "";
+const apiSecret = "";
+const client = new Spot(apiKey, apiSecret);
 
-client.account({ recvWindow: 2000 }).then(response => client.logger.log(response.data))
-
+client
+  .account({ recvWindow: 2000 })
+  .then((response) => client.logger.log(response.data));
 ```
 
 ### Timeout
@@ -120,15 +125,16 @@ client.account({ recvWindow: 2000 }).then(response => client.logger.log(response
 It's easy to set timeout in milliseconds in request. If the request take longer than timeout, the request will be aborted. If it's not set, there will be no timeout.
 
 ```javascript
-const { Spot } = require('@binance/connector')
+const { Futures } = require("wirnata15-binance_futures_sdk");
 
-const apiKey = ''
-const apiSecret = ''
-const client = new Spot(apiKey, apiSecret, { timeout: 1000 })
+const apiKey = "";
+const apiSecret = "";
+const client = new Spot(apiKey, apiSecret, { timeout: 1000 });
 
-client.account()
-  .then(response => client.logger.log(response.data))
-  .catch(error => client.logger.error(error.message))
+client
+  .account()
+  .then((response) => client.logger.log(response.data))
+  .catch((error) => client.logger.error(error.message));
 ```
 
 ### Proxy
@@ -136,49 +142,46 @@ client.account()
 The `axios` package is used as the http client in this library. A proxy settings is passed into `axios` directly, the details can be found at [here](https://github.com/axios/axios#request-config):
 
 ```javascript
-const { Spot } = require('@binance/connector')
+const { Spot } = require("@binance/connector");
 
-const apiKey = ''
-const apiSecret = ''
-const client = new Spot(apiKey, apiSecret,
-  {
-    proxy: {
-      protocol: 'https',
-      host: '127.0.0.1',
-      port: 9000,
-      auth: {
-        username: 'proxy_user',
-        password: 'password'
-      }
-    }
-  }
-)
+const apiKey = "";
+const apiSecret = "";
+const client = new Spot(apiKey, apiSecret, {
+  proxy: {
+    protocol: "https",
+    host: "127.0.0.1",
+    port: 9000,
+    auth: {
+      username: "proxy_user",
+      password: "password",
+    },
+  },
+});
 ```
 
-You may have a HTTP proxy, that can bring the problem that you need to make a HTTPS connection through the HTTP proxy.  You can do that by build a HTTPS-over-HTTP tunnel by npm package [tunnel](https://www.npmjs.com/package/tunnel), and then pass the turnnel agent to `httpsAgent` in `axios`.
+You may have a HTTP proxy, that can bring the problem that you need to make a HTTPS connection through the HTTP proxy. You can do that by build a HTTPS-over-HTTP tunnel by npm package [tunnel](https://www.npmjs.com/package/tunnel), and then pass the turnnel agent to `httpsAgent` in `axios`.
 
 ```javascript
-const tunnel = require('tunnel')
+const tunnel = require("tunnel");
 
 const agent = tunnel.httpsOverHttp({
   proxy: {
     host: "127.0.0.1",
-    port: 3128
-  }
-})
+    port: 3128,
+  },
+});
 
-const client = new Spot(null, null,
-  {
-    baseURL: "https://api.binance.com",
-    httpsAgent: agent
-  }
-)
+const client = new Spot(null, null, {
+  baseURL: "https://api.binance.com",
+  httpsAgent: agent,
+});
 
-client.time()
-  .then(response => client.logger.log(response.data))
-  .catch(error => client.logger.error(error))
-
+client
+  .time()
+  .then((response) => client.logger.log(response.data))
+  .catch((error) => client.logger.error(error));
 ```
+
 [This comment](https://github.com/axios/axios/issues/925#issuecomment-359982190) provides more details.
 
 ### Response Metadata
@@ -195,20 +198,19 @@ client.exchangeInfo().then(response => client.logger.log(response.headers['x-mbx
 ### Custom Logger Integration
 
 ```javascript
-const Spot = require('@binance/connector')
-const fs = require('fs')
-const { Console } = require('console')
+const Spot = require("@binance/connector");
+const fs = require("fs");
+const { Console } = require("console");
 
 // make sure the logs/ folder is created beforehand
-const output = fs.createWriteStream('./logs/stdout.log')
-const errorOutput = fs.createWriteStream('./logs/stderr.log')
+const output = fs.createWriteStream("./logs/stdout.log");
+const errorOutput = fs.createWriteStream("./logs/stderr.log");
 
-const logger = new Console({ stdout: output, stderr: errorOutput })
-const client = new Spot('', '', {logger: logger})
+const logger = new Console({ stdout: output, stderr: errorOutput });
+const client = new Spot("", "", { logger: logger });
 
-client.exchangeInfo().then(response => client.logger.log(response.data))
+client.exchangeInfo().then((response) => client.logger.log(response.data));
 // check the output file
-
 ```
 
 The default logger defined in the package is [Node.js Console class](https://nodejs.org/api/console.html). Its output is sent to `process.stdout` and `process.stderr`, same as the global console.
@@ -218,6 +220,7 @@ The default logger defined in the package is [Node.js Console class](https://nod
 There are 2 types of error that may be returned from the API server and the user has to handle it properly:
 
 - `Client error`
+
   - This is thrown when server returns `4XX`, it's an issue from client side.
   - The following properties may be helpful to resolve the issue:
     - Response header - Please refer to `Response Metadata` section for more details.
@@ -242,82 +245,6 @@ There are 2 types of error that may be returned from the API server and the user
 - `Server error`
   - This is thrown when server returns `5XX`, it's an issue from server side.
 
-
-## Websocket
-
-### Websocket Stream
-```javascript
-const { WebsocketStream } = require('@binance/connector')
-const logger = new Console({ stdout: process.stdout, stderr: process.stderr })
-
-// define callbacks for different events
-const callbacks = {
-  open: () => logger.debug('Connected with Websocket server'),
-  close: () => logger.debug('Disconnected with Websocket server'),
-  message: data => logger.info(data)
-}
-
-const websocketStreamClient = new WebsocketStream({ logger, callbacks })
-// subscribe ticker stream
-websocketStreamClient.ticker('bnbusdt')
-// close websocket stream
-setTimeout(() => websocketStreamClient.disconnect(), 6000)
-
-```
-
-### Unsubscribe Websocket Stream
-
-```javascript
-// unsubscribe websocket stream
-websocketStreamClient.unsubscribe('bnbusdt@kline_1m')
-```
-
-### WebSocket API
-
-```javascript
-const { WebsocketAPI } = require('@binance/connector')
-const logger = new Console({ stdout: process.stdout, stderr: process.stderr })
-
-// callbacks for different events
-const callbacks = {
-  open: (client) => {
-    logger.debug('Connected with Websocket server')
-    // send message to get orderbook info after connection open
-    client.orderbook('BTCUSDT')
-    client.orderbook('BNBUSDT', { limit: 10 })
-  },
-  close: () => logger.debug('Disconnected with Websocket server'),
-  message: data => logger.info(data)
-}
-
-const websocketAPIClient = new WebsocketAPI(null, null, { logger, callbacks })
-
-// disconnect the connection
-setTimeout(() => websocketAPIClient.disconnect(), 20000)
-
-```
-
-More websocket examples are available in the `examples` folder
-
-
-### Auto Reconnect
-
-If there is a close event not initiated by the user, the reconnection mechanism will be triggered in 5 secs.
-
-### Ping Server
-
-It is possible to ping server from client, and expect to receive a PONG message.
-
-```javascript
-websocketStreamClient.pingServer()
-```
-
-### Custom Logger Integration
-
-The default logger defined in the package is [Node.js Console class](https://nodejs.org/api/console.html). Its output is sent to `process.stdout` and `process.stderr`, same as the global console.
-
-Note that when the connection is initialized, the console outputs a list of callbacks in the form of `listen to event: <event_name>`.
-
 ## Test
 
 ```bash
@@ -331,10 +258,11 @@ npm run test
 
 Futures and Vanilla Options APIs are not supported:
 
-  - `/fapi/*`
-  - `/dapi/*`
-  - `/vapi/*`
-  -  Associated Websocket Market and User Data Streams
+- `/fapi/*`
+- `/dapi/*`
+- `/vapi/*`
+- Associated Websocket Market and User Data Streams
 
 ## License
+
 MIT
