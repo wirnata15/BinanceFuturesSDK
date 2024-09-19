@@ -2,6 +2,10 @@
 
 # This SDK won't include Websocket.
 
+## If you find any bug while trying this SDK, please inform me since i'm solo worker here hehe
+
+## contact me through email: agungchandranata@gmail.com
+
 # Binance connector in Nodejs
 
 [![npm version](https://badge.fury.io/js/%40binance%2Fconnector.svg)](https://badge.fury.io/js/%40binance%2Fconnector)

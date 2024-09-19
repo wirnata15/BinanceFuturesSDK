@@ -598,7 +598,161 @@ const Trade = (superclass) =>
       );
     }
 
-    // WIP - Agung add neworder trade endpoint
+    /**
+     * Position Information V2 (USER_DATA) <br>
+     *
+     * GET /fapi/v2/positionRisk <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Position-Information-V2}
+     *
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {string} [options.symbol]
+     * @param {number} [options.recvWindow]
+     */
+
+    positionInformationV2(timestamp, options = {}) {
+      validateRequiredParameters({ timestamp });
+      return this.signRequest(
+        "GET",
+        "/fapi/v2/positionRisk",
+        Object.assign(options, {
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Position Information V3 (USER_DATA) <br>
+     *
+     * GET /fapi/v3/positionRisk <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Position-Information-V3}
+     *
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {string} [options.symbol]
+     * @param {number} [options.recvWindow]
+     */
+
+    positionInformationV3(timestamp, options = {}) {
+      validateRequiredParameters({ timestamp });
+      return this.signRequest(
+        "GET",
+        "/fapi/v3/positionRisk",
+        Object.assign(options, {
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Position ADL Quantile Estimation(USER_DATA) <br>
+     *
+     * GET /fapi/v1/adlQuantile <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Position-ADL-Quantile-Estimation}
+     *
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {string} [options.symbol]
+     * @param {number} [options.recvWindow]
+     */
+
+    adlQuantile(timestamp, options = {}) {
+      validateRequiredParameters({ timestamp });
+      return this.signRequest(
+        "GET",
+        "/fapi/v3/positionRisk",
+        Object.assign(options, {
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Get Position Margin Change History (TRADE) <br>
+     *
+     * GET /fapi/v1/positionMargin/history <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Get-Position-Margin-Change-History}
+     *
+     * @param {string} symbol
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {number} [options.type]
+     * @param {number} [options.startTime]
+     * @param {number} [options.endTime]
+     * @param {number} [options.limit]
+     * @param {number} [options.recvWindow]
+     */
+
+    positionMarginHistory(symbol, timestamp, options = {}) {
+      validateRequiredParameters({ symbol, timestamp });
+      return this.signRequest(
+        "GET",
+        "/fapi/v1/positionMargin/history",
+        Object.assign(options, {
+          symbol: symbol.toUpperCase(),
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Test Order(TRADE) <br>
+     *
+     * POST /fapi/v1/order/test <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/New-Order-Test}
+     *
+     * @param {string} symbol
+     * @param {string} side
+     * @param {string} type
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {string} [options.positionSide]
+     * @param {string} [options.timeInForce]
+     * @param {number} [options.quantity]
+     * @param {string} [options.reduceOnly]
+     * @param {number} [options.price]
+     * @param {string} [options.newClientOrderId]
+     * @param {number} [options.stopPrice]
+     * @param {string} [options.closePosition]
+     * @param {number} [options.activationPrice] - The value cannot be less than 1000000.
+     * @param {number} [options.callbackRate]
+     * @param {string} [options.workingType]
+     * @param {string} [options.priceProtect]
+     * @param {string} [options.newOrderRespType]
+     * @param {string} [options.priceMatch] - The value cannot be greater than 60000
+     * @param {string} [options.selfTradePreventionMode]
+     * @param {number} [options.goodTillDate]
+     * @param {number} [options.recvWindow]
+     */
+
+    /**
+     * Additional mandatory parameters based on type:
+     * type LIMIT => timeInForce, quantity, price,
+     * type MARKET => quantity,
+     * type STOP/TAKE_PROFIT => quantity, price, stopPrice
+     * type STOP_MARKET/TAKE_PROFIT_MARKET => stopPrice
+     * type TRAILING_STOP_MARKET	=> callbackRate
+     */
+
+    newOrder(symbol, side, type, timestamp, options = {}) {
+      validateRequiredParameters({ symbol, side, type, timestamp });
+
+      return this.signRequest(
+        "POST",
+        "/fapi/v1/order/test",
+        Object.assign(options, {
+          symbol: symbol.toUpperCase(),
+          side: side.toUpperCase(),
+          type: type.toUpperCase(),
+          timestamp,
+        })
+      );
+    }
   };
 
 module.exports = Trade;
