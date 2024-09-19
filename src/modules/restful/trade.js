@@ -183,7 +183,7 @@ const Trade = (superclass) =>
 
     orderModifyHistory(symbol, timestamp, options = {}) {
       validateRequiredParameters({ symbol, timestamp });
-      return this.signRequest(
+      return this.publicRequest(
         "GET",
         "/fapi/v1/orderAmendment",
         Object.assign(options, {
@@ -316,7 +316,7 @@ const Trade = (superclass) =>
 
     queryOrder(symbol, timestamp, options = {}) {
       validateRequiredParameters({ symbol, timestamp });
-      return this.signRequest(
+      return this.publicRequest(
         "GET",
         "/fapi/v1/order",
         Object.assign(options, {
@@ -345,7 +345,7 @@ const Trade = (superclass) =>
 
     queryAllOrders(symbol, timestamp, options = {}) {
       validateRequiredParameters({ symbol, timestamp });
-      return this.signRequest(
+      return this.publicRequest(
         "GET",
         "/fapi/v1/allOrders",
         Object.assign(options, {
@@ -370,7 +370,7 @@ const Trade = (superclass) =>
 
     queryCurrentAllOpenOrders(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.signRequest(
+      return this.publicRequest(
         "GET",
         "/fapi/v1/openOrders",
         Object.assign(options, {
@@ -396,7 +396,7 @@ const Trade = (superclass) =>
 
     queryCurrentOpenOrder(symbol, timestamp, options = {}) {
       validateRequiredParameters({ symbol, timestamp });
-      return this.signRequest(
+      return this.publicRequest(
         "GET",
         "/fapi/v1/openOrder",
         Object.assign(options, {
@@ -425,7 +425,7 @@ const Trade = (superclass) =>
 
     forceOrders(timestamp, options = {}) {
       validateRequiredParameters({ symbol, timestamp });
-      return this.signRequest(
+      return this.publicRequest(
         "GET",
         "/fapi/v1/forceOrders",
         Object.assign(options, {
@@ -454,7 +454,7 @@ const Trade = (superclass) =>
 
     queryUserTrades(symbol, timestamp, options = {}) {
       validateRequiredParameters({ symbol, timestamp });
-      return this.signRequest(
+      return this.publicRequest(
         "GET",
         "/fapi/v1/userTrades",
         Object.assign(options, {
@@ -613,7 +613,7 @@ const Trade = (superclass) =>
 
     positionInformationV2(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.signRequest(
+      return this.publicRequest(
         "GET",
         "/fapi/v2/positionRisk",
         Object.assign(options, {
@@ -637,7 +637,7 @@ const Trade = (superclass) =>
 
     positionInformationV3(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.signRequest(
+      return this.publicRequest(
         "GET",
         "/fapi/v3/positionRisk",
         Object.assign(options, {
@@ -661,7 +661,7 @@ const Trade = (superclass) =>
 
     adlQuantile(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.signRequest(
+      return this.publicRequest(
         "GET",
         "/fapi/v3/positionRisk",
         Object.assign(options, {
@@ -689,7 +689,7 @@ const Trade = (superclass) =>
 
     positionMarginHistory(symbol, timestamp, options = {}) {
       validateRequiredParameters({ symbol, timestamp });
-      return this.signRequest(
+      return this.publicRequest(
         "GET",
         "/fapi/v1/positionMargin/history",
         Object.assign(options, {
