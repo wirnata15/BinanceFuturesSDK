@@ -234,6 +234,105 @@ const Account = (superclass) =>
         })
       );
     }
+
+    /**
+     * Get Current Position Mode(USER_DATA) <br>
+     *
+     * GET /fapi/v1/positionSide/dual <br>
+     *
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {number} [options.recvWindow]
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Get-Current-Position-Mode}
+     */
+    currentPositionMode() {
+      validateRequiredParameters({ timestamp });
+      return this.publicRequest(
+        "GET",
+        "/fapi/v1/positionSide/dual",
+        Object.assign(options, {
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Get Income History (USER_DATA) <br>
+     *
+     * GET /fapi/v1/income <br>
+     *
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {string} [options.symbol]
+     * @param {string} [options.incomeType]
+     * @param {number} [options.startTime]
+     * @param {number} [options.endTime]
+     * @param {number} [options.page]
+     * @param {number} [options.limit]
+     * @param {number} [options.recvWindow]
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Get-Income-History}
+     */
+    getIncomeHistory() {
+      validateRequiredParameters({ timestamp });
+      return this.publicRequest(
+        "GET",
+        "/fapi/v1/income",
+        Object.assign(options, {
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Futures Trading Quantitative Rules Indicators (USER_DATA) <br>
+     *
+     * GET /fapi/v1/apiTradingStatus <br>
+     *
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {string} [options.symbol]
+     * @param {number} [options.recvWindow]
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Futures-Trading-Quantitative-Rules-Indicators}
+     */
+    apiTradingStatus() {
+      validateRequiredParameters({ timestamp });
+      return this.publicRequest(
+        "GET",
+        "/fapi/v1/apiTradingStatus",
+        Object.assign(options, {
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * Get Download Id For Futures Transaction History(USER_DATA) <br>
+     *
+     * GET /fapi/v1/income/asyn <br>
+     *
+     * @param {number} startTime
+     * @param {number} endTime
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {number} [options.recvWindow]
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Get-Download-Id-For-Futures-Transaction-History}
+     */
+    getDownloadIdTransactionHistory() {
+      validateRequiredParameters({ startTime, endTime, timestamp });
+      return this.publicRequest(
+        "GET",
+        "/fapi/v1/income/asyn",
+        Object.assign(options, {
+          startTime,
+          endTime,
+          timestamp,
+        })
+      );
+    }
   };
 
 module.exports = Account;
