@@ -1,8 +1,8 @@
 'use strict'
 
-const Error = require('../error/error')
+const ClientError = require('./error')
 
-class ConnectorClientError extends Error {
+class ConnectorClientError extends ClientError {
   constructor (errorMessage) {
     super(errorMessage)
     this.name = 'ConnectorClientError'

@@ -3,8 +3,8 @@
 const { validateRequiredParameters } = require("../../helpers/validation");
 
 /**
- * API market endpoints
- * @module Market
+ * API account endpoints
+ * @module Account
  * @param {*} superclass
  */
 const Account = (superclass) =>
@@ -20,14 +20,12 @@ const Account = (superclass) =>
      *
      * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Futures-Account-Balance-V3}
      */
-    futuresAccountBalanceV3() {
+    futuresAccountBalanceV3(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v3/balance",
-        Object.assign(options, {
-          timestamp,
-        })
+        Object.assign(options, { timestamp })
       );
     }
 
@@ -42,14 +40,12 @@ const Account = (superclass) =>
      *
      * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Futures-Account-Balance-V2}
      */
-    futuresAccountBalanceV2() {
+    futuresAccountBalanceV2(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v2/balance",
-        Object.assign(options, {
-          timestamp,
-        })
+        Object.assign(options, { timestamp })
       );
     }
 
@@ -64,14 +60,12 @@ const Account = (superclass) =>
      *
      * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Account-Information-V3}
      */
-    accountInformationV3() {
+    accountInformationV3(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v3/account",
-        Object.assign(options, {
-          timestamp,
-        })
+        Object.assign(options, { timestamp })
       );
     }
 
@@ -86,14 +80,12 @@ const Account = (superclass) =>
      *
      * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Account-Information-V2}
      */
-    accountInformationV2() {
+    accountInformationV2(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v2/account",
-        Object.assign(options, {
-          timestamp,
-        })
+        Object.assign(options, { timestamp })
       );
     }
 
@@ -109,9 +101,9 @@ const Account = (superclass) =>
      *
      * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/User-Commission-Rate}
      */
-    userComissionRate() {
+    userComissionRate(symbol, timestamp, options = {}) {
       validateRequiredParameters({ symbol, timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v1/commissionRate",
         Object.assign(options, {
@@ -132,14 +124,12 @@ const Account = (superclass) =>
      *
      * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Account-Config}
      */
-    futuresAccountConfiguration() {
+    futuresAccountConfiguration(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v1/accountConfig",
-        Object.assign(options, {
-          timestamp,
-        })
+        Object.assign(options, { timestamp })
       );
     }
 
@@ -148,27 +138,24 @@ const Account = (superclass) =>
      *
      * GET /fapi/v1/symbolConfig <br>
      *
-     * @param {string} symbol
      * @param {number} timestamp
      * @param {object} [options]
+     * @param {string} [options.symbol]
      * @param {number} [options.recvWindow]
      *
      * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Symbol-Config}
      */
-    futuresSymbolConfiguration() {
+    futuresSymbolConfiguration(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v1/symbolConfig",
-        Object.assign(options, {
-          symbol: symbol.toUpperCase(),
-          timestamp,
-        })
+        Object.assign(options, { timestamp })
       );
     }
 
     /**
-     * User's Force Orders (USER_DATA) <br>
+     * Query Order Rate Limit (USER_DATA) <br>
      *
      * GET /fapi/v1/rateLimit/order <br>
      *
@@ -178,15 +165,12 @@ const Account = (superclass) =>
      *
      * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Query-Rate-Limit}
      */
-    queryOrderRateLimit() {
+    queryOrderRateLimit(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v1/rateLimit/order",
-        Object.assign(options, {
-          symbol: symbol.toUpperCase(),
-          timestamp,
-        })
+        Object.assign(options, { timestamp })
       );
     }
 
@@ -202,14 +186,12 @@ const Account = (superclass) =>
      *
      * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Notional-and-Leverage-Brackets}
      */
-    leverageBracket() {
+    leverageBracket(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v1/leverageBracket",
-        Object.assign(options, {
-          timestamp,
-        })
+        Object.assign(options, { timestamp })
       );
     }
 
@@ -224,14 +206,12 @@ const Account = (superclass) =>
      *
      * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Get-Current-Multi-Assets-Mode}
      */
-    multiAssetMargin() {
+    multiAssetMargin(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v1/multiAssetsMargin",
-        Object.assign(options, {
-          timestamp,
-        })
+        Object.assign(options, { timestamp })
       );
     }
 
@@ -246,14 +226,12 @@ const Account = (superclass) =>
      *
      * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Get-Current-Position-Mode}
      */
-    currentPositionMode() {
+    currentPositionMode(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v1/positionSide/dual",
-        Object.assign(options, {
-          timestamp,
-        })
+        Object.assign(options, { timestamp })
       );
     }
 
@@ -274,14 +252,12 @@ const Account = (superclass) =>
      *
      * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Get-Income-History}
      */
-    getIncomeHistory() {
+    getIncomeHistory(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v1/income",
-        Object.assign(options, {
-          timestamp,
-        })
+        Object.assign(options, { timestamp })
       );
     }
 
@@ -297,14 +273,12 @@ const Account = (superclass) =>
      *
      * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Futures-Trading-Quantitative-Rules-Indicators}
      */
-    apiTradingStatus() {
+    apiTradingStatus(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v1/apiTradingStatus",
-        Object.assign(options, {
-          timestamp,
-        })
+        Object.assign(options, { timestamp })
       );
     }
 
@@ -321,16 +295,12 @@ const Account = (superclass) =>
      *
      * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/account/rest-api/Get-Download-Id-For-Futures-Transaction-History}
      */
-    getDownloadIdTransactionHistory() {
+    getDownloadIdTransactionHistory(startTime, endTime, timestamp, options = {}) {
       validateRequiredParameters({ startTime, endTime, timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v1/income/asyn",
-        Object.assign(options, {
-          startTime,
-          endTime,
-          timestamp,
-        })
+        Object.assign(options, { startTime, endTime, timestamp })
       );
     }
   };

@@ -29,26 +29,23 @@ const Trade = (superclass) =>
      * @param {string} [options.newClientOrderId]
      * @param {number} [options.stopPrice]
      * @param {string} [options.closePosition]
-     * @param {number} [options.activationPrice] - The value cannot be less than 1000000.
+     * @param {number} [options.activationPrice]
      * @param {number} [options.callbackRate]
      * @param {string} [options.workingType]
      * @param {string} [options.priceProtect]
      * @param {string} [options.newOrderRespType]
-     * @param {string} [options.priceMatch] - The value cannot be greater than 60000
+     * @param {string} [options.priceMatch]
      * @param {string} [options.selfTradePreventionMode]
      * @param {number} [options.goodTillDate]
      * @param {number} [options.recvWindow]
-     */
-
-    /**
+     *
      * Additional mandatory parameters based on type:
-     * type LIMIT => timeInForce, quantity, price,
-     * type MARKET => quantity,
+     * type LIMIT => timeInForce, quantity, price
+     * type MARKET => quantity
      * type STOP/TAKE_PROFIT => quantity, price, stopPrice
      * type STOP_MARKET/TAKE_PROFIT_MARKET => stopPrice
-     * type TRAILING_STOP_MARKET	=> callbackRate
+     * type TRAILING_STOP_MARKET => callbackRate
      */
-
     newOrder(symbol, side, type, timestamp, options = {}) {
       validateRequiredParameters({ symbol, side, type, timestamp });
 
@@ -65,18 +62,62 @@ const Trade = (superclass) =>
     }
 
     /**
+     * Test New Order (TRADE)<br>
+     *
+     * POST /fapi/v1/order/test <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/New-Order-Test}
+     *
+     * @param {string} symbol
+     * @param {string} side
+     * @param {string} type
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {string} [options.positionSide]
+     * @param {string} [options.timeInForce]
+     * @param {number} [options.quantity]
+     * @param {string} [options.reduceOnly]
+     * @param {number} [options.price]
+     * @param {string} [options.newClientOrderId]
+     * @param {number} [options.stopPrice]
+     * @param {string} [options.closePosition]
+     * @param {number} [options.activationPrice]
+     * @param {number} [options.callbackRate]
+     * @param {string} [options.workingType]
+     * @param {string} [options.priceProtect]
+     * @param {string} [options.newOrderRespType]
+     * @param {string} [options.priceMatch]
+     * @param {string} [options.selfTradePreventionMode]
+     * @param {number} [options.goodTillDate]
+     * @param {number} [options.recvWindow]
+     */
+    newOrderTest(symbol, side, type, timestamp, options = {}) {
+      validateRequiredParameters({ symbol, side, type, timestamp });
+
+      return this.signRequest(
+        "POST",
+        "/fapi/v1/order/test",
+        Object.assign(options, {
+          symbol: symbol.toUpperCase(),
+          side: side.toUpperCase(),
+          type: type.toUpperCase(),
+          timestamp,
+        })
+      );
+    }
+
+    /**
      * Place Multiple Orders(TRADE) <br>
      *
      * POST /fapi/v1/batchOrders <br>
      *
      * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Place-Multiple-Orders}
      *
-     * @param {object[]} batchOrders => reffer to New Order params (:13)
+     * @param {object[]} batchOrders
      * @param {number} timestamp
      * @param {object} [options]
      * @param {number} [options.recvWindow]
      */
-
     placeMultipleOrder(batchOrders, timestamp, options = {}) {
       for (let i = 0; i < batchOrders.length; i++) {
         const { symbol, side, type, quantity } = batchOrders[i];
@@ -108,20 +149,18 @@ const Trade = (superclass) =>
      * @param {object} [options]
      * @param {number} [options.orderId]
      * @param {string} [options.origClientOrderId]
-     * @param {number} [options.priceMatch] only avaliable for LIMIT/STOP/TAKE_PROFIT order; can be set to OPPONENT/ OPPONENT_5/ OPPONENT_10/ OPPONENT_20: /QUEUE/ QUEUE_5/ QUEUE_10/ QUEUE_20; Can't be passed together with price
+     * @param {number} [options.priceMatch]
      * @param {number} [options.recvWindow]
-     *
      */
-
-    modifyOrder(symbol, side, number, price, timestamp, options = {}) {
-      validateRequiredParameters({ symbol, side, number, price, timestamp });
+    modifyOrder(symbol, side, quantity, price, timestamp, options = {}) {
+      validateRequiredParameters({ symbol, side, quantity, price, timestamp });
       return this.signRequest(
         "PUT",
         "/fapi/v1/order",
         Object.assign(options, {
           symbol: symbol.toUpperCase(),
           side: side.toUpperCase(),
-          number,
+          quantity,
           price,
           timestamp,
         })
@@ -135,22 +174,15 @@ const Trade = (superclass) =>
      *
      * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Modify-Multiple-Orders}
      *
-     * @param {object[]} batchOrders => reffer to Modify Order params (:97)
+     * @param {object[]} batchOrders
      * @param {number} timestamp
      * @param {object} [options]
      * @param {number} [options.recvWindow]
      */
-
     modifyMultipleOrder(batchOrders, timestamp, options = {}) {
       for (let i = 0; i < batchOrders.length; i++) {
-        const { symbol, side, quantity, price, timestamp } = batchOrders[i];
-        validateRequiredParameters({
-          symbol,
-          side,
-          quantity,
-          price,
-          timestamp,
-        });
+        const { symbol, side, quantity, price, timestamp: ts } = batchOrders[i];
+        validateRequiredParameters({ symbol, side, quantity, price, timestamp: ts });
       }
       validateRequiredParameters({ timestamp });
       return this.signRequest(
@@ -180,10 +212,9 @@ const Trade = (superclass) =>
      * @param {number} [options.limit]
      * @param {number} [options.recvWindow]
      */
-
     orderModifyHistory(symbol, timestamp, options = {}) {
       validateRequiredParameters({ symbol, timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v1/orderAmendment",
         Object.assign(options, {
@@ -198,14 +229,14 @@ const Trade = (superclass) =>
      *
      * DELETE /fapi/v1/order<br>
      *
-     * {@link https://binance-docs.github.io/apidocs/spot/en/#cancel-order-trade}
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Cancel-Order}
      *
      * @param {string} symbol
      * @param {number} timestamp
      * @param {object} [options]
      * @param {number} [options.orderId]
      * @param {string} [options.origClientOrderId]
-     * @param {number} [options.recvWindow] - The value cannot be greater than 60000
+     * @param {number} [options.recvWindow]
      */
     cancelOrder(symbol, timestamp, options = {}) {
       validateRequiredParameters({ symbol, timestamp });
@@ -234,7 +265,6 @@ const Trade = (superclass) =>
      * @param {string[]} [options.origClientOrderIdList]
      * @param {number} [options.recvWindow]
      */
-
     cancelMultipleOrders(symbol, timestamp, options = {}) {
       validateRequiredParameters({ symbol, timestamp });
       return this.signRequest(
@@ -259,7 +289,6 @@ const Trade = (superclass) =>
      * @param {object} [options]
      * @param {number} [options.recvWindow]
      */
-
     cancelAllOpenOrders(symbol, timestamp, options = {}) {
       validateRequiredParameters({ symbol, timestamp });
       return this.signRequest(
@@ -280,14 +309,13 @@ const Trade = (superclass) =>
      * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Auto-Cancel-All-Open-Orders}
      *
      * @param {string} symbol
-     * @param {number} timestamp
      * @param {number} countdownTime
+     * @param {number} timestamp
      * @param {object} [options]
      * @param {number} [options.recvWindow]
      */
-
-    countDownCancelAll(symbol, timestamp, countdownTime, options = {}) {
-      validateRequiredParameters({ symbol, timestamp, countdownTime });
+    countDownCancelAll(symbol, countdownTime, timestamp, options = {}) {
+      validateRequiredParameters({ symbol, countdownTime, timestamp });
       return this.signRequest(
         "POST",
         "/fapi/v1/countdownCancelAll",
@@ -313,10 +341,9 @@ const Trade = (superclass) =>
      * @param {string} [options.origClientOrderId]
      * @param {number} [options.recvWindow]
      */
-
     queryOrder(symbol, timestamp, options = {}) {
       validateRequiredParameters({ symbol, timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v1/order",
         Object.assign(options, {
@@ -327,7 +354,7 @@ const Trade = (superclass) =>
     }
 
     /**
-     * Query All Order (USER_DATA) <br>
+     * Query All Orders (USER_DATA) <br>
      *
      * GET /fapi/v1/allOrders <br>
      *
@@ -342,10 +369,9 @@ const Trade = (superclass) =>
      * @param {string} [options.origClientOrderId]
      * @param {number} [options.recvWindow]
      */
-
     queryAllOrders(symbol, timestamp, options = {}) {
       validateRequiredParameters({ symbol, timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v1/allOrders",
         Object.assign(options, {
@@ -367,15 +393,12 @@ const Trade = (superclass) =>
      * @param {string} [options.symbol]
      * @param {number} [options.recvWindow]
      */
-
     queryCurrentAllOpenOrders(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v1/openOrders",
-        Object.assign(options, {
-          timestamp,
-        })
+        Object.assign(options, { timestamp })
       );
     }
 
@@ -393,10 +416,9 @@ const Trade = (superclass) =>
      * @param {string} [options.origClientOrderId]
      * @param {number} [options.recvWindow]
      */
-
     queryCurrentOpenOrder(symbol, timestamp, options = {}) {
       validateRequiredParameters({ symbol, timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v1/openOrder",
         Object.assign(options, {
@@ -417,20 +439,17 @@ const Trade = (superclass) =>
      * @param {object} [options]
      * @param {string} [options.symbol]
      * @param {string} [options.autoCloseType]
-     * @param {string} [options.startTime]
-     * @param {string} [options.endTime]
-     * @param {string} [options.limit]
+     * @param {number} [options.startTime]
+     * @param {number} [options.endTime]
+     * @param {number} [options.limit]
      * @param {number} [options.recvWindow]
      */
-
     forceOrders(timestamp, options = {}) {
-      validateRequiredParameters({ symbol, timestamp });
-      return this.publicRequest(
+      validateRequiredParameters({ timestamp });
+      return this.signRequest(
         "GET",
         "/fapi/v1/forceOrders",
-        Object.assign(options, {
-          timestamp,
-        })
+        Object.assign(options, { timestamp })
       );
     }
 
@@ -451,10 +470,9 @@ const Trade = (superclass) =>
      * @param {number} [options.limit]
      * @param {number} [options.recvWindow]
      */
-
     queryUserTrades(symbol, timestamp, options = {}) {
       validateRequiredParameters({ symbol, timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v1/userTrades",
         Object.assign(options, {
@@ -472,12 +490,11 @@ const Trade = (superclass) =>
      * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Change-Margin-Type}
      *
      * @param {string} symbol
-     * @param {number} marginType
+     * @param {string} marginType
      * @param {number} timestamp
      * @param {object} [options]
      * @param {number} [options.recvWindow]
      */
-
     changeMarginType(symbol, marginType, timestamp, options = {}) {
       validateRequiredParameters({ symbol, marginType, timestamp });
       return this.signRequest(
@@ -503,7 +520,6 @@ const Trade = (superclass) =>
      * @param {object} [options]
      * @param {number} [options.recvWindow]
      */
-
     changePositionMode(dualSidePosition, timestamp, options = {}) {
       validateRequiredParameters({ dualSidePosition, timestamp });
       return this.signRequest(
@@ -529,7 +545,6 @@ const Trade = (superclass) =>
      * @param {object} [options]
      * @param {number} [options.recvWindow]
      */
-
     changeLeverage(symbol, leverage, timestamp, options = {}) {
       validateRequiredParameters({ symbol, leverage, timestamp });
       return this.signRequest(
@@ -555,7 +570,6 @@ const Trade = (superclass) =>
      * @param {object} [options]
      * @param {number} [options.recvWindow]
      */
-
     changeMultiAssetType(multiAssetsMargin, timestamp, options = {}) {
       validateRequiredParameters({ multiAssetsMargin, timestamp });
       return this.signRequest(
@@ -577,13 +591,12 @@ const Trade = (superclass) =>
      *
      * @param {string} symbol
      * @param {number} amount
-     * @param {string} type // 1: Add position margin，2: Reduce position margin
+     * @param {number} type - 1: Add position margin, 2: Reduce position margin
      * @param {number} timestamp
      * @param {object} [options]
-     * @param {string} [options.positionSide] // Default BOTH for One-way Mode ; LONG or SHORT for Hedge Mode. It must be sent with Hedge Mode.
+     * @param {string} [options.positionSide]
      * @param {number} [options.recvWindow]
      */
-
     modifyIsolatedMargin(symbol, amount, type, timestamp, options = {}) {
       validateRequiredParameters({ symbol, amount, type, timestamp });
       return this.signRequest(
@@ -593,6 +606,41 @@ const Trade = (superclass) =>
           symbol: symbol.toUpperCase(),
           amount,
           type,
+          timestamp,
+        })
+      );
+    }
+
+    /**
+     * New Algo Order (TRADE)<br>
+     *
+     * POST /fapi/v1/algoOrder <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/New-Algo-Order}
+     *
+     * @param {string} symbol
+     * @param {string} side
+     * @param {string} type - TAKE_PROFIT_MARKET or STOP_MARKET
+     * @param {number} triggerPrice
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {string} [options.positionSide]
+     * @param {number} [options.quantity]
+     * @param {string} [options.workingType]
+     * @param {string} [options.priceProtect]
+     * @param {number} [options.recvWindow]
+     */
+    newAlgoOrder(symbol, side, type, triggerPrice, timestamp, options = {}) {
+      validateRequiredParameters({ symbol, side, type, triggerPrice, timestamp });
+      return this.signRequest(
+        "POST",
+        "/fapi/v1/algoOrder",
+        Object.assign(options, {
+          symbol: symbol.toUpperCase(),
+          side: side.toUpperCase(),
+          type: type.toUpperCase(),
+          algoType: "CONDITIONAL",
+          triggerPrice,
           timestamp,
         })
       );
@@ -610,15 +658,12 @@ const Trade = (superclass) =>
      * @param {string} [options.symbol]
      * @param {number} [options.recvWindow]
      */
-
     positionInformationV2(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v2/positionRisk",
-        Object.assign(options, {
-          timestamp,
-        })
+        Object.assign(options, { timestamp })
       );
     }
 
@@ -634,15 +679,12 @@ const Trade = (superclass) =>
      * @param {string} [options.symbol]
      * @param {number} [options.recvWindow]
      */
-
     positionInformationV3(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v3/positionRisk",
-        Object.assign(options, {
-          timestamp,
-        })
+        Object.assign(options, { timestamp })
       );
     }
 
@@ -658,15 +700,12 @@ const Trade = (superclass) =>
      * @param {string} [options.symbol]
      * @param {number} [options.recvWindow]
      */
-
     adlQuantile(timestamp, options = {}) {
       validateRequiredParameters({ timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
-        "/fapi/v3/positionRisk",
-        Object.assign(options, {
-          timestamp,
-        })
+        "/fapi/v1/adlQuantile",
+        Object.assign(options, { timestamp })
       );
     }
 
@@ -686,69 +725,13 @@ const Trade = (superclass) =>
      * @param {number} [options.limit]
      * @param {number} [options.recvWindow]
      */
-
     positionMarginHistory(symbol, timestamp, options = {}) {
       validateRequiredParameters({ symbol, timestamp });
-      return this.publicRequest(
+      return this.signRequest(
         "GET",
         "/fapi/v1/positionMargin/history",
         Object.assign(options, {
           symbol: symbol.toUpperCase(),
-          timestamp,
-        })
-      );
-    }
-
-    /**
-     * Test Order(TRADE) <br>
-     *
-     * POST /fapi/v1/order/test <br>
-     *
-     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/New-Order-Test}
-     *
-     * @param {string} symbol
-     * @param {string} side
-     * @param {string} type
-     * @param {number} timestamp
-     * @param {object} [options]
-     * @param {string} [options.positionSide]
-     * @param {string} [options.timeInForce]
-     * @param {number} [options.quantity]
-     * @param {string} [options.reduceOnly]
-     * @param {number} [options.price]
-     * @param {string} [options.newClientOrderId]
-     * @param {number} [options.stopPrice]
-     * @param {string} [options.closePosition]
-     * @param {number} [options.activationPrice] - The value cannot be less than 1000000.
-     * @param {number} [options.callbackRate]
-     * @param {string} [options.workingType]
-     * @param {string} [options.priceProtect]
-     * @param {string} [options.newOrderRespType]
-     * @param {string} [options.priceMatch] - The value cannot be greater than 60000
-     * @param {string} [options.selfTradePreventionMode]
-     * @param {number} [options.goodTillDate]
-     * @param {number} [options.recvWindow]
-     */
-
-    /**
-     * Additional mandatory parameters based on type:
-     * type LIMIT => timeInForce, quantity, price,
-     * type MARKET => quantity,
-     * type STOP/TAKE_PROFIT => quantity, price, stopPrice
-     * type STOP_MARKET/TAKE_PROFIT_MARKET => stopPrice
-     * type TRAILING_STOP_MARKET	=> callbackRate
-     */
-
-    newOrder(symbol, side, type, timestamp, options = {}) {
-      validateRequiredParameters({ symbol, side, type, timestamp });
-
-      return this.signRequest(
-        "POST",
-        "/fapi/v1/order/test",
-        Object.assign(options, {
-          symbol: symbol.toUpperCase(),
-          side: side.toUpperCase(),
-          type: type.toUpperCase(),
           timestamp,
         })
       );

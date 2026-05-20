@@ -1,10 +1,13 @@
 'use strict'
 
-class Error {
+class ClientError extends Error {
   constructor (message) {
-    this.message = message
-    this.name = 'Error'
+    super(message)
+    this.name = this.constructor.name
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor)
+    }
   }
 }
 
-module.exports = Error
+module.exports = ClientError

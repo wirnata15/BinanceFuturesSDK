@@ -1,10 +1,10 @@
 'use strict'
 
-const Error = require('../error/error')
+const ClientError = require('./error')
 
-class MissingParameterError extends Error {
+class MissingParameterError extends ClientError {
   constructor (paramNames) {
-    super(`One or more of required parameters is missing: ${paramNames ? paramNames.slice().join(', ') : ''} `)
+    super(`One or more of required parameters is missing: ${paramNames ? paramNames.slice().join(', ') : ''}`)
     this.name = 'MissingParameterError'
   }
 }

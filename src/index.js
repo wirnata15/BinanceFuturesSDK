@@ -1,4 +1,13 @@
-"use strict";
+'use strict'
 
-module.exports.PrivateKeyAlgo = require("./helpers/privateKeyAlgo");
-module.exports.Futures = require("./futures");
+const Futures = require('./futures')
+const PrivateKeyAlgo = require('./helpers/privateKeyAlgo')
+const ConnectorClientError = require('./error/connectorClientError')
+const MissingParameterError = require('./error/missingParameterError')
+
+module.exports = {
+  Futures,
+  PrivateKeyAlgo,
+  ConnectorClientError,
+  MissingParameterError
+}
