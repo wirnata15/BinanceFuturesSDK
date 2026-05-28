@@ -380,6 +380,18 @@ const Market = (superclass) =>
     }
 
     /**
+     * 24hr Ticker Price Change Statistics — All Symbols<br>
+     *
+     * GET /fapi/v1/ticker/24hr<br>
+     *
+     * Omitting the symbol returns an array of stats for every symbol.<br>
+     * {@link https://binance-docs.github.io/apidocs/futures/en/#24hr-ticker-price-change-statistics}
+     */
+    priceChange24HAll() {
+      return this.publicRequest("GET", "/fapi/v1/ticker/24hr");
+    }
+
+    /**
      * Symbol Price Ticker <br>
      *
      * GET /fapi/v1/ticker/price<br>
