@@ -647,6 +647,32 @@ const Trade = (superclass) =>
     }
 
     /**
+     * Change Initial Leverage (TRADE)<br>
+     *
+     * POST /fapi/v1/leverage<br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Change-Initial-Leverage}
+     *
+     * @param {string} symbol
+     * @param {number} leverage - target initial leverage: int from 1 to 125
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {number} [options.recvWindow]
+     */
+    setLeverage(symbol, leverage, timestamp, options = {}) {
+      validateRequiredParameters({ symbol, leverage, timestamp });
+      return this.signRequest(
+        "POST",
+        "/fapi/v1/leverage",
+        Object.assign(options, {
+          symbol: symbol.toUpperCase(),
+          leverage,
+          timestamp,
+        })
+      );
+    }
+
+    /**
      * Position Information V2 (USER_DATA) <br>
      *
      * GET /fapi/v2/positionRisk <br>
