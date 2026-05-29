@@ -612,6 +612,30 @@ const Trade = (superclass) =>
     }
 
     /**
+     * Cancel Algo Order (TRADE)<br>
+     *
+     * DELETE /fapi/v1/algoOrder <br>
+     *
+     * {@link https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Cancel-Algo-Order}
+     *
+     * @param {number} algoId
+     * @param {number} timestamp
+     * @param {object} [options]
+     * @param {number} [options.recvWindow]
+     */
+    cancelAlgoOrder(algoId, timestamp, options = {}) {
+      validateRequiredParameters({ algoId, timestamp });
+      return this.signRequest(
+        "DELETE",
+        "/fapi/v1/algoOrder",
+        Object.assign(options, {
+          algoId,
+          timestamp,
+        })
+      );
+    }
+
+    /**
      * New Algo Order (TRADE)<br>
      *
      * POST /fapi/v1/algoOrder <br>
